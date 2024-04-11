@@ -1,5 +1,9 @@
+<script setup>
+
+</script>
+
 <template>
-  <div>
+  <div class="main-container">
     <h1>PEDIDOS</h1>
   </div>
 </template>
