@@ -78,16 +78,6 @@
     }
   ],
   "burgers": [
-    {
-      "id": "d9df",
-      "nome": "Júlio vieira paixão ",
-      "carne": "Picanha",
-      "pao": "Italiano Branco",
-      "opcionais": [
-        "Bacon",
-        "Cheddar"
-      ],
-      "status": "Solicitado"
-    }
+    
   ]
 }

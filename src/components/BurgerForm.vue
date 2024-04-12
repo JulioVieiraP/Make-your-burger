@@ -41,6 +41,12 @@ const createBurger = async () => {
 
     const res = await req.json()
 
+    obj.msg = "pedido realizado com sucesso"
+
+    setTimeout(() => {
+        obj.msg = null
+    }, 5000);
+
     obj.nome = ''
     obj.pao = ''
     obj.carne = ''
@@ -53,7 +59,7 @@ onMounted(getIngredientes)
 
 <template>
     <div>
-        <Message/>
+        <Message :msg = 'obj.msg' v-show="obj.msg"/>
         <form class="burger__form" @submit.prevent="createBurger">
             <div class="input__container">
                 <label for="nome">Nome do cliente:</label>
