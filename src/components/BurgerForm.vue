@@ -1,7 +1,6 @@
 <script setup>
 import { reactive, onMounted } from "vue";
 
-
 const obj = reactive({
     paes: null,
     carnes: null,
@@ -10,17 +9,42 @@ const obj = reactive({
     pao: null,
     carne: null,
     opcionais: [],
-    status: "Solicitado",
     msg: null,
 })
 
-const getIngredientes = async () =>{
+const getIngredientes = async () => {
     const req = await fetch('http://localhost:3000/ingredientes')
     const Data = await req.json()
-    
+
     obj.paes = Data.paes
     obj.carnes = Data.carnes
     obj.opcionaisdata = Data.opcionais
+}
+
+const createBurger = async () => {
+    const data = {
+        nome: obj.nome,
+        carne: obj.carne,
+        pao: obj.pao,
+        opcionais: Array.from(obj.opcionais),
+        status: "Solicitado"
+    }
+
+    const dataJson = JSON.stringify(data)
+
+    const req = await fetch("http://localhost:3000/burgers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: dataJson
+    });
+
+    const res = await req.json()
+
+    obj.nome = ''
+    obj.pao = ''
+    obj.carne = ''
+    obj.opcionais = []
+
 }
 
 onMounted(getIngredientes)
@@ -29,30 +53,30 @@ onMounted(getIngredientes)
 <template>
     <div>
         <p>componente de msg</p>
-        <form class="burger__form" @submit.prevent="">
+        <form class="burger__form" @submit.prevent="createBurger">
             <div class="input__container">
                 <label for="nome">Nome do cliente:</label>
-                <input type="text" id="nome" name="nome" v-model="nome" placeholder="Digite o seu nome">
+                <input type="text" id="nome" name="nome" v-model="obj.nome" placeholder="Digite o seu nome">
             </div>
             <div class="input__container">
                 <label for="pao">Escolha o pão do seu Burger:</label>
                 <select id="pao" name="pao" v-model="obj.pao">
                     <option value="">Selecione o seu pão</option>
-                    <option v-for="pao in obj.paes" :key="pao.id" :value="pao.tipo">{{pao.tipo}}</option>
+                    <option v-for="pao in obj.paes" :key="pao.id" :value="pao.tipo">{{ pao.tipo }}</option>
                 </select>
             </div>
             <div class="input__container">
                 <label for="carne">Escolha a carne do seu Burger:</label>
                 <select id="carne" name="carne" v-model="obj.carne">
                     <option value="">Selecione o tipo de carne</option>
-                    <option v-for="carne in obj.carnes" :key="carne.id" :value="carne.tipo">{{carne.tipo}}</option>
+                    <option v-for="carne in obj.carnes" :key="carne.id" :value="carne.tipo">{{ carne.tipo }}</option>
                 </select>
             </div>
             <div id="opcionais__container" class="input__container">
                 <label for="opcionais" class="opcionais__title">Selecione os opcionais:</label>
                 <div class="checkbox__container" v-for="opcional in obj.opcionaisdata" :key="opcional.id">
-                    <input type="checkbox" name="opcionais" v-model="obj.opcionaisdata" :value="opcional.tipo">
-                    <span>{{opcional.tipo}}</span>
+                    <input type="checkbox" name="opcionais" v-model="obj.opcionais" :value="opcional.tipo">
+                    <span>{{ opcional.tipo }}</span>
                 </div>
             </div>
             <div class="input__container">
@@ -62,6 +86,7 @@ onMounted(getIngredientes)
         </form>
     </div>
 </template>
+
 
 
 <style scoped>
