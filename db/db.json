@@ -78,6 +78,28 @@
     }
   ],
   "burgers": [
-    
+    {
+      "id": "a615",
+      "nome": "Júlio vieira paixão ",
+      "carne": "Maminha",
+      "pao": "3 Queijos",
+      "opcionais": [
+        "Bacon",
+        "Pepino",
+        "Tomate"
+      ],
+      "status": "Solicitado"
+    },
+    {
+      "id": "109a",
+      "nome": "maria",
+      "carne": "Veggie burger",
+      "pao": "Italiano Branco",
+      "opcionais": [
+        "Bacon",
+        "Cheddar"
+      ],
+      "status": "Solicitado"
+    }
   ]
 }
