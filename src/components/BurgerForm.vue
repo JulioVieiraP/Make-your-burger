@@ -1,5 +1,6 @@
 <script setup>
 import { reactive, onMounted } from "vue";
+import Message from "./Message.vue";
 
 const obj = reactive({
     paes: null,
@@ -52,7 +53,7 @@ onMounted(getIngredientes)
 
 <template>
     <div>
-        <p>componente de msg</p>
+        <Message/>
         <form class="burger__form" @submit.prevent="createBurger">
             <div class="input__container">
                 <label for="nome">Nome do cliente:</label>
