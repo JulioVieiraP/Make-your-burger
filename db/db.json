@@ -89,6 +89,17 @@
         "Tomate"
       ],
       "status": "Finalizado"
+    },
+    {
+      "id": "0c7a",
+      "nome": "julio",
+      "carne": "Maminha",
+      "pao": "Italiano Branco",
+      "opcionais": [
+        "Bacon",
+        "Cheddar"
+      ],
+      "status": "Solicitado"
     }
   ]
 }

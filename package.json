@@ -7,10 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "backend" : "json-server --watch db/db.json"
+    "backend": "json-server --watch db/db.json"
   },
   "dependencies": {
     "json-server": "^1.0.0-alpha.23",
+    "make-your-burger": "file:",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },

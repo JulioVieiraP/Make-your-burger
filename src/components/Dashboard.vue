@@ -10,42 +10,44 @@ const obj = reactive({
 })
 
 const getPedidos = async () => {
-    const req = await fetch('http://localhost:3000/burgers')
+    const req = await fetch('https://juliovieirap.pythonanywhere.com/burgers/')
     const data = await req.json()
 
-    obj.burgers = data
+    obj.burgers = data.burgers
 
     getStatus()
 }
 
 const getStatus = async () => {
-    const req = await fetch('http://localhost:3000/status')
+    const req = await fetch('https://juliovieirap.pythonanywhere.com/burgers/ingredientes/')
     const data = await req.json()
 
-    obj.status = data
+    obj.status = data.status
 }
 
 const deleteBurger = async (id) => {
-    const req = await fetch(`http://localhost:3000/burgers/${id}`, {
+    const req = await fetch(`https://juliovieirap.pythonanywhere.com/burgers/${id}/`, {
         method: "DELETE"
-    })
+    });
 
-    const res = await req.json()
+    if (req.ok) {
+        obj.burgers = obj.burgers.filter(burger => burger.id !== id);
 
-    obj.msg = `O pedido ${res.id} deletado com sucesso`
+        obj.msg = `O pedido ${id} foi deletado com sucesso`;
 
-    setTimeout(() => {
-        obj.msg = null
-    }, 5000);
-
-    getPedidos()
-}
+        setTimeout(() => {
+            obj.msg = null;
+        }, 5000);
+    } else {
+        obj.msg = `Erro ao tentar deletar o pedido ${id}`;
+    }
+};
 
 const updateBurger = async (event, id) => {
     const option = event.target.value
     const dataJson = JSON.stringify({ status: option })
 
-    const req = await fetch(`http://localhost:3000/burgers/${id}`, {
+    const req = await fetch(`https://juliovieirap.pythonanywhere.com/burgers/${id}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: dataJson
@@ -89,9 +91,9 @@ onMounted(getPedidos)
                 </td>
                 <td>
                     <select name="status" class="status" @change="updateBurger($event, burger.id)">
-                        <option :value="status.tipo" v-for="status in obj.status" :key="status.id"
-                            :selected="burger.status == status.tipo">
-                            {{ status.tipo }}
+                        <option :value="status.nome" v-for="status in obj.status" :key="status.id"
+                            :selected="burger.status == status.nome">
+                            {{ status.nome }}
                         </option>
                     </select>
                     <button class="delete-btn" @click="deleteBurger(burger.id)">Cancelar</button>

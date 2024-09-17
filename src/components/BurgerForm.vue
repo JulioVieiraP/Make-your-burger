@@ -14,7 +14,7 @@ const obj = reactive({
 })
 
 const getIngredientes = async () => {
-    const req = await fetch('http://localhost:3000/ingredientes')
+    const req = await fetch('https://juliovieirap.pythonanywhere.com/burgers/ingredientes/')
     const Data = await req.json()
 
     obj.paes = Data.paes
@@ -27,13 +27,14 @@ const createBurger = async () => {
         nome: obj.nome,
         carne: obj.carne,
         pao: obj.pao,
-        opcionais: Array.from(obj.opcionais),
+        opcionais: obj.opcionais,
         status: "Solicitado"
     }
 
     const dataJson = JSON.stringify(data)
+    console.log(dataJson)
 
-    const req = await fetch("http://localhost:3000/burgers", {
+    const req = await fetch("https://juliovieirap.pythonanywhere.com/burgers/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: dataJson
@@ -69,21 +70,21 @@ onMounted(getIngredientes)
                 <label for="pao">Escolha o pão do seu Burger:</label>
                 <select id="pao" name="pao" v-model="obj.pao">
                     <option value="">Selecione o seu pão</option>
-                    <option v-for="pao in obj.paes" :key="pao.id" :value="pao.tipo">{{ pao.tipo }}</option>
+                    <option v-for="pao in obj.paes" :key="pao.id" :value="pao.nome">{{ pao.nome }}</option>
                 </select>
             </div>
             <div class="input__container">
                 <label for="carne">Escolha a carne do seu Burger:</label>
                 <select id="carne" name="carne" v-model="obj.carne">
                     <option value="">Selecione o tipo de carne</option>
-                    <option v-for="carne in obj.carnes" :key="carne.id" :value="carne.tipo">{{ carne.tipo }}</option>
+                    <option v-for="carne in obj.carnes" :key="carne.id" :value="carne.nome">{{ carne.nome }}</option>
                 </select>
             </div>
             <div id="opcionais__container" class="input__container">
                 <label for="opcionais" class="opcionais__title">Selecione os opcionais:</label>
                 <div class="checkbox__container" v-for="opcional in obj.opcionaisdata" :key="opcional.id">
-                    <input type="checkbox" name="opcionais" v-model="obj.opcionais" :value="opcional.tipo">
-                    <span>{{ opcional.tipo }}</span>
+                    <input type="checkbox" name="opcionais" v-model="obj.opcionais" :value="opcional.nome">
+                    <span>{{ opcional.nome }}</span>
                 </div>
             </div>
             <div class="input__container">
