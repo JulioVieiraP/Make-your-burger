@@ -10,7 +10,7 @@
 
 <style scoped>
 .hero{
-    background-image: url(./images/burger.jpg);
+    background-image: url(../assets/images/burger.jpg);
     background-position: 0 -250px;
     background-repeat: no-repeat;
     background-size: cover;
