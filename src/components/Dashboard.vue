@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, reactive } from 'vue';
 import Message from './Message.vue';
+import { API_BASE_URL } from '../api/api';
 
 const obj = reactive({
     burgers: null,
@@ -10,23 +11,37 @@ const obj = reactive({
 })
 
 const getPedidos = async () => {
-    const req = await fetch('https://juliovieirap.pythonanywhere.com/burgers/')
-    const data = await req.json()
+    try {
+        const req = await fetch(`${API_BASE_URL}/burgers/`);
+        if (!req.ok) {
+            throw new Error(`Erro: ${req.status} ${req.statusText}`);
+        }
+        const data = await req.json();
+        obj.burgers = data.burgers;
+        await getStatus();
+    } catch (error) {
+        console.error("Erro ao obter pedidos:", error);
+        obj.msg = "Erro ao carregar pedidos.";
+        setTimeout(() => {
+            obj.msg = null;
+        }, 5000);
+    }
+};
 
-    obj.burgers = data.burgers
-
-    getStatus()
-}
 
 const getStatus = async () => {
-    const req = await fetch('https://juliovieirap.pythonanywhere.com/burgers/ingredientes/')
-    const data = await req.json()
+    try {
+        const req = await fetch(`${API_BASE_URL}/burgers/ingredientes/`)
+        const data = await req.json()
 
-    obj.status = data.status
+        obj.status = data.status
+    } catch (error) {
+        console.error("Erro ao obter status:", error);
+    }
 }
 
 const deleteBurger = async (id) => {
-    const req = await fetch(`https://juliovieirap.pythonanywhere.com/burgers/${id}/`, {
+    const req = await fetch(`${API_BASE_URL}/burgers/${id}/`, {
         method: "DELETE"
     });
 
@@ -47,7 +62,7 @@ const updateBurger = async (event, id) => {
     const option = event.target.value
     const dataJson = JSON.stringify({ status: option })
 
-    const req = await fetch(`https://juliovieirap.pythonanywhere.com/burgers/${id}/`, {
+    const req = await fetch(`${API_BASE_URL}/burgers/${id}/`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: dataJson

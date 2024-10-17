@@ -1,6 +1,7 @@
 <script setup>
 import { reactive, onMounted } from "vue";
 import Message from "./Message.vue";
+import { API_BASE_URL } from "../api/api";
 
 const obj = reactive({
     paes: null,
@@ -11,10 +12,11 @@ const obj = reactive({
     carne: null,
     opcionais: [],
     msg: null,
+    loading: false
 })
 
 const getIngredientes = async () => {
-    const req = await fetch('https://juliovieirap.pythonanywhere.com/burgers/ingredientes/')
+    const req = await fetch(`${API_BASE_URL}/burgers/ingredientes/`)
     const Data = await req.json()
 
     obj.paes = Data.paes
@@ -23,6 +25,7 @@ const getIngredientes = async () => {
 }
 
 const createBurger = async () => {
+    obj.loading = true; // Desativa inputs
     const data = {
         nome: obj.nome,
         carne: obj.carne,
@@ -34,26 +37,34 @@ const createBurger = async () => {
     const dataJson = JSON.stringify(data)
     console.log(dataJson)
 
-    const req = await fetch("https://juliovieirap.pythonanywhere.com/burgers/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: dataJson
-    });
+    try {
+        const req = await fetch(`${API_BASE_URL}/burgers/`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: dataJson
+        });
 
-    const res = await req.json()
+        const res = await req.json()
 
-    obj.msg = "pedido realizado com sucesso"
+        obj.msg = "Pedido realizado com sucesso"
 
-    setTimeout(() => {
-        obj.msg = null
-    }, 5000);
+        obj.nome = ''
+        obj.pao = ''
+        obj.carne = ''
+        obj.opcionais = []
 
-    obj.nome = ''
-    obj.pao = ''
-    obj.carne = ''
-    obj.opcionais = []
+        setTimeout(() => {
+            obj.msg = null
+        }, 5000);
 
+    } catch (error) {
+        console.error("Erro ao enviar o pedido:", error);
+        obj.msg = "Ocorreu um erro ao enviar o pedido.";
+    } finally {
+        obj.loading = false;
+    }
 }
+
 
 onMounted(getIngredientes)
 </script>
@@ -88,7 +99,7 @@ onMounted(getIngredientes)
                 </div>
             </div>
             <div class="input__container">
-                <input type="submit" class="submit-btn" value="Criar meu Burger!">
+                <input type="submit" class="submit-btn" value="Criar meu Burger!" :disabled="obj.loading">
             </div>
 
         </form>
